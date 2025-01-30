@@ -1,16 +1,23 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import {Body, Controller, Get, Post} from '@nestjs/common';
+import { CardsService} from './app.service';
+import {HydratedDocument} from "mongoose";
+import {cardMainPageDocument} from "./cards.schema";
 interface CardProps {
   id: number;
   category: string;
   image: string;
   title: string;
 }
-@Controller()
+@Controller('mainPageCards')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: CardsService) {}
   @Get()
-  getCards(): CardProps[]{
-    return this.getCards()
+  async getCards(): Promise<HydratedDocument<cardMainPageDocument, {}, {}>[]> {
+    return this.appService.getCards();
   }
+  @Post()
+  async createCard(@Body() body: CardProps ): Promise<HydratedDocument<cardMainPageDocument, {}, {}>> {
+    return this.appService.createCard(body.category, body.image, body.title);
+  }
+
 }
