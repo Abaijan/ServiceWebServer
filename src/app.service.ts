@@ -15,4 +15,11 @@ export class CardsService {
     async getCards(): Promise<HydratedDocument<cardMainPageDocument>[]> {
         return this.cardModel.find().exec();
     }
+
+    async deleteCard(id: string): Promise<HydratedDocument<cardMainPageDocument> | null> {
+        return this.cardModel.findByIdAndDelete(id);
+    }
+    async updateCard(id: string, category: string, image: string, title: string): Promise<HydratedDocument<cardMainPageDocument> | null> {
+        return this.cardModel.findByIdAndUpdate(id, { category, image, title });
+    }
 }
